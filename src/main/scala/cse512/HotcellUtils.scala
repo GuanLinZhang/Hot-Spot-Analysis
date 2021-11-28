@@ -47,7 +47,7 @@ object HotcellUtils {
     return calendar.get(Calendar.DAY_OF_MONTH)
   }
 
-  def calculateNeighbouringCells(inputX: Int, inputY: Int, inputZ: Int, minX: Int, maxX: Int, minY: Int, maxY: Int, minZ: Int, maxZ: Int): Int =
+  def getNumberOfNeighbours(inputX: Int, inputY: Int, inputZ: Int, minX: Int, maxX: Int, minY: Int, maxY: Int, minZ: Int, maxZ: Int): Int =
   {
     var countOfNeighbours = 0
     if (inputX == minX || inputX == maxX) {
@@ -71,10 +71,10 @@ object HotcellUtils {
     return 26;
   }
 
-  def calculateGScore(adjacentCellCount: Int, sumHotCells: Int, numCells: Int, x: Int, y: Int, z: Int, mean: Double, standardDeviation: Double): Double =
+  def getGscore(adjacentCellCount: Int, sumHotCells: Int, numCells: Int, x: Int, y: Int, z: Int, mean: Double, standardDeviation: Double): Double =
   {
     val numerator = (sumHotCells.toDouble - (mean * adjacentCellCount.toDouble))
     val denominator = standardDeviation * math.sqrt((((numCells.toDouble * adjacentCellCount.toDouble) - (adjacentCellCount.toDouble * adjacentCellCount.toDouble)) / (numCells.toDouble - 1.0).toDouble).toDouble).toDouble
-    return (numerator / denominator).toDouble
+    return (numerator/denominator).toDouble
   }
 }
