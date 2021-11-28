@@ -49,36 +49,32 @@ object HotcellUtils {
 
   def calculateNeighbouringCells(inputX: Int, inputY: Int, inputZ: Int, minX: Int, maxX: Int, minY: Int, maxY: Int, minZ: Int, maxZ: Int): Int =
   {
-    var count = 0
-
+    var countOfNeighbours = 0
     if (inputX == minX || inputX == maxX) {
-      count += 1
+      countOfNeighbours += 1
     }
-
     if (inputY == minY || inputY == maxY) {
-      count += 1
+      countOfNeighbours += 1
     }
-
     if (inputZ == minZ || inputZ == maxZ) {
-      count += 1
+      countOfNeighbours += 1
     }
-
-    if (count == 1) {
+    if (countOfNeighbours == 1) {
       return 17;
-    } else if (count == 2) {
+    } 
+    else if (countOfNeighbours == 2) {
       return 11;
-    } else if (count == 3) {
+    } 
+    else if (countOfNeighbours == 3) {
       return 7;
     }
-
     return 26;
   }
 
   def calculateGScore(adjacentCellCount: Int, sumHotCells: Int, numCells: Int, x: Int, y: Int, z: Int, mean: Double, standardDeviation: Double): Double =
   {
-    val dividend = (sumHotCells.toDouble - (mean * adjacentCellCount.toDouble))
-    val divisor = standardDeviation * math.sqrt((((numCells.toDouble * adjacentCellCount.toDouble) - (adjacentCellCount.toDouble * adjacentCellCount.toDouble)) / (numCells.toDouble - 1.0).toDouble).toDouble).toDouble
-
-    return (dividend / divisor).toDouble
+    val numerator = (sumHotCells.toDouble - (mean * adjacentCellCount.toDouble))
+    val denominator = standardDeviation * math.sqrt((((numCells.toDouble * adjacentCellCount.toDouble) - (adjacentCellCount.toDouble * adjacentCellCount.toDouble)) / (numCells.toDouble - 1.0).toDouble).toDouble).toDouble
+    return (numerator / denominator).toDouble
   }
 }
