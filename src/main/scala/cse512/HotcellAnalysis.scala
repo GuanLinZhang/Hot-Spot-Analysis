@@ -67,7 +67,7 @@ object HotcellAnalysis {
     val sd = scala.math.sqrt(((sumOfSquares.first().getDouble(0).toDouble / numCells.toDouble) - (mean.toDouble * mean.toDouble))).toDouble
     // println(mean)
 
-    spark.udf.register("neighbouringCells", (inputX: Int, inputY: Int, inputZ: Int, minX: Int, maxX: Int, minY: Int, maxY: Int, minZ: Int, maxZ: Int) => ((HotcellUtils.calculateNeighbouringCells(inputX, inputY, inputZ, minX, minY, minZ, maxX, maxY, maxZ))))
+    spark.udf.register("neighbouringCells", (inputX: Int, inputY: Int, inputZ: Int, minX: Int, maxX: Int, minY: Int, maxY: Int, minZ: Int, maxZ: Int) => ((HotcellUtils.getNumberOfNeighbours(inputX, inputY, inputZ, minX, minY, minZ, maxX, maxY, maxZ))))
 
     val neighbouringCells = spark.sql("select neighbouringCells(sch1.x, sch1.y, sch1.z, " + minX + "," + maxX + "," + minY + "," + maxY + "," + minZ + "," + maxZ + ") as neighbouringCellCount,"
       + "sch1.x as x, sch1.y as y, sch1.z as z, "
@@ -81,7 +81,7 @@ object HotcellAnalysis {
     neighbouringCells.createOrReplaceTempView("neighbouringCells")
     // neighbouringCells.show()
 
-    spark.udf.register("g_score", (neighbouringCellCount: Int, sumHotCells: Int, numCells: Int, x: Int, y: Int, z: Int, mean: Double, sd: Double) => ((HotcellUtils.calculateGScore(neighbouringCellCount, sumHotCells, numCells, x, y, z, mean, sd))))
+    spark.udf.register("g_score", (neighbouringCellCount: Int, sumHotCells: Int, numCells: Int, x: Int, y: Int, z: Int, mean: Double, sd: Double) => ((HotcellUtils.getGscore(neighbouringCellCount, sumHotCells, numCells, x, y, z, mean, sd))))
 
     pickupInfo = spark.sql("select g_score(neighbouringCellCount, sumHotCells, "+ numCells + ", x, y, z," + mean + ", " + sd + ") as getisOrdStatistic, x, y, z from neighbouringCells order by getisOrdStatistic desc");
     pickupInfo.createOrReplaceTempView("g_score")
