@@ -59,7 +59,7 @@ object HotcellAnalysis {
     val sumOfSquares = spark.sql("select sum(square(hotCells)) as sumOfSquares from selectedCellHotness")
     sumOfSquares.createOrReplaceTempView("sumOfSquares")
 
-    val sd = scala.math.sqrt(((sumOfSquares.first().getDouble(0).toDouble / numCells.toDouble) - (mean.toDouble * mean.toDouble))).toDouble
+    val sd = scala.math.sqrt(((sumOfSquares.first().getDouble(0).toDouble/numCells.toDouble)-(mean.toDouble * mean.toDouble))).toDouble
 
     spark.udf.register("neighbouringCells", (inputX: Int, inputY: Int, inputZ: Int, minX: Int, maxX: Int, minY: Int, maxY: Int, minZ: Int, maxZ: Int) => ((HotcellUtils.getNumberOfNeighbours(inputX, inputY, inputZ, minX, minY, minZ, maxX, maxY, maxZ))))
 
